@@ -37,7 +37,17 @@ knowledge1 = And(
 # A says "We are the same kind."
 # B says "We are of different kinds."
 knowledge2 = And(
-    # TODO
+    # A and B can only be a knave or a knight, not both
+    And(Or(AKnave, AKnight), Not(And(AKnight, AKnave))),
+    And(Or(BKnave, BKnight), Not(And(BKnight, BKnave))),
+    # If A is a knight, both are
+    Implication(AKnight, Or(And(AKnight, BKnight), And(AKnave, BKnave))),
+    # If A is a knave, statement needs to be false
+    Implication(AKnave, Not(Or(And(AKnight, BKnight), And(AKnave, BKnave)))),
+    # If B is a knight, different
+    Implication(BKnight, Or(And(AKnave, BKnight), And(AKnight, BKnave))),
+    # If B is a knave, lies
+    Implication(BKnave, Not(Or(And(AKnave, BKnight), And(AKnight, BKnave))))
 )
 
 # Puzzle 3
